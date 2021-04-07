@@ -1,0 +1,22 @@
+{
+    "name": "os_programadores/desafio_cinco",
+    "description": "Projeto para resolver o desagio cinco do site",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Klisóstom",
+            "email": "klis@pm.me"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/collections": "8.35",
+        "symfony/var-dumper": "^5.1.4"
+    },
+    "require-dev": {}
+}
