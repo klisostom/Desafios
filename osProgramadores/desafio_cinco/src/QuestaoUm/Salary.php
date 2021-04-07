@@ -32,7 +32,7 @@ class Salary
     {
         return $this->employees()
             ->groupBy('salario')
-            ->map(fn ($item) => $item->pluck('salario')->min());
+            ->map(fn ($item) => $item->pluck('salario'));
     }
 
     public function avgSalary(): float

@@ -84,7 +84,7 @@ class QuestaoUmTest extends TestCase
         );
     }
 
-    public function test_print_result(): void
+    public function test_repeated_values_are_returned(): void
     {
         $salary = new Salary($this->getEmployees());
 
