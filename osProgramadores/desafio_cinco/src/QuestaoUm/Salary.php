@@ -14,30 +14,41 @@ class Salary
         return collect($this->employees);
     }
 
-    public function bigger(): float
+    protected function calculateSalary()
     {
         return $this->employees()
-            ->map(fn($item) => $item['salario'])
-            ->max();
-    }
-
-    public function smaller(): float
-    {
-        return $this->employees()
-            ->map(fn($item) => $item['salario'])
-            ->min();
-    }
-
-    public function smallerTest()
-    {
-        return $this->employees()
+            ->map(function ($employee) {
+                return array_merge(
+                    ['nome' => $employee['nome']],
+                    ['salario' => $employee['salario']]
+                );
+            })
             ->groupBy('salario')
-            ->map(fn ($item) => $item->pluck('salario'));
+            ->sortKeysDesc();
+    }
+
+    public function bigger(): array
+    {
+        return $this->calculateSalary()
+            ->first()
+            ->all();
+    }
+
+    public function smaller(): array
+    {
+        return $this->calculateSalary()
+            ->last()
+            ->all();
     }
 
     public function avgSalary(): float
     {
         $result = $this->employees()->avg('salario');
         return number_format($result, 2, '.', '');
+    }
+
+    public function print_result(): string
+    {
+        # code...
     }
 }
