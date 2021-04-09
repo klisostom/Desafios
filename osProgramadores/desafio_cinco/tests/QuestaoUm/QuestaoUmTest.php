@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App;
 
@@ -22,9 +22,9 @@ class QuestaoUmTest extends TestCase
     protected function getEmployeesFactory(): array
     {
         return [
-            ["salario" => 3200.00],
-            ["salario" => 1240.00],
-            ["salario" => 1000.00],
+            ["salario" => 3200.00, "nome" => "Marcelo"],
+            ["salario" => 1240.00, "nome" => "Ciclano"],
+            ["salario" => 1000.00, "nome" => "Beltano"],
         ];
     }
 
@@ -36,26 +36,15 @@ class QuestaoUmTest extends TestCase
         $this->assertNotEmpty($employees);
     }
 
-    public function test_highest_salary_is_float(): void
-    {
-        $employees = $this->getEmployees();
-
-        $salary = new Salary($employees);
-
-        $this->assertIsFloat($salary->bigger());
-    }
-
     public function test_get_the_highest_salary(): void
     {
         $employees = $this->getEmployeesFactory();
 
         $salary = new Salary($employees);
+        $biggersSalaries = $salary->bigger();
 
-        $this->assertEquals(
-            3200.00,
-            $salary->bigger(),
-            'Maior salário deveria ser 3200.00'
-        );
+        $this->assertIsArray($biggersSalaries);
+        $this->assertGreaterThanOrEqual(1, count($biggersSalaries));
     }
 
     public function test_get_smaller_salary(): void
@@ -63,12 +52,10 @@ class QuestaoUmTest extends TestCase
         $employees = $this->getEmployeesFactory();
 
         $salary = new Salary($employees);
+        $smallersSalaries = $salary->smaller();
 
-        $this->assertEquals(
-            1000.00,
-            $salary->smaller(),
-            'Menor salário deveria ser 1000.00'
-        );
+        $this->assertIsArray($smallersSalaries);
+        $this->assertGreaterThanOrEqual(1, count($smallersSalaries));
     }
 
     public function test_get_the_avg_salary(): void
@@ -84,10 +71,8 @@ class QuestaoUmTest extends TestCase
         );
     }
 
-    public function test_repeated_values_are_returned(): void
+    public function test_print_result(): void
     {
-        $salary = new Salary($this->getEmployees());
-
-        dump($salary->smallerTest());
+        # code...
     }
 }
