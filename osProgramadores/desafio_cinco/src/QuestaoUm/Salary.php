@@ -47,8 +47,41 @@ class Salary
         return number_format($result, 2, '.', '');
     }
 
-    public function print_result(): string
+    public function print_questao_um()
     {
-        # code...
+        $result = $this->printBiggers()
+            ->pipe($this->printSmallers())
+            ->pipe($this->printAvg())
+            ->toJson(JSON_PRETTY_PRINT);
+
+        return preg_replace(array('/[\"\r\[\],]/'), '', $result);
+    }
+
+    private function printBiggers()
+    {
+        return collect($this->bigger())
+        ->map(function ($employees) {
+            return "global_max|{$employees['nome']}|" . number_format($employees['salario'], 2, '.', '');
+        });
+    }
+
+    private function printSmallers()
+    {
+        return function ($biggers) {
+            $smallers = collect($this->smaller())
+                ->map(function ($employees) {
+                    return "global_min|{$employees['nome']}|" . number_format($employees['salario'], 2, '.', '');
+                });
+
+            return collect(array_merge($biggers->toArray(), $smallers->toArray()));
+        };
+    }
+
+    private function printAvg()
+    {
+        return function ($collection) {
+            $avg = "global_avg|" . number_format($this->avgSalary(), 2, '.', '');
+            return collect(array_merge($collection->toArray(), [$avg]));
+        };
     }
 }
