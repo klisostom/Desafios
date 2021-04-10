@@ -5,8 +5,8 @@ namespace App;
 define('__ROOT__', dirname(dirname(__FILE__)));
 require_once __ROOT__ . '../../vendor/autoload.php';
 
-require_once __ROOT__ . '../../src/QuestaoUm/Employee.php';
-require_once __ROOT__ . '../../src/QuestaoUm/Salary.php';
+require_once __ROOT__ . '../../src/Employee.php';
+require_once __ROOT__ . '../../src/Salary.php';
 
 use PHPUnit\Framework\TestCase;
 
@@ -14,9 +14,7 @@ class QuestaoUmTest extends TestCase
 {
     protected function getEmployees(): array
     {
-        $employee = new Employee();
-
-        return $employee->getEmployees();
+        return (new Employee())->getEmployees();
     }
 
     protected function getEmployeesFactory(): array
@@ -87,7 +85,7 @@ $result =
 
         $this->assertEquals(
             1610.00,
-            $salary->avgSalary(),
+            $salary->average(),
             'Média salarial deveria ser 1766.66'
         );
     }
