@@ -18,21 +18,7 @@ class Salary implements SalaryInterface
             $this->employees() :
             collect($employees);
     }
-
-    protected function calculateSalary()
-    {
-        return $this->employees
-            ->map(function ($employee) {
-                return array_merge(
-                    ['nome' => $employee['nome']],
-                    ['sobrenome' => $employee['sobrenome']],
-                    ['salario' => $employee['salario']]
-                );
-            })
-            ->groupBy('salario')
-            ->sortKeysDesc();
-    }
-
+    
     public function bigger(): array
     {
         return $this->calculateSalary()
