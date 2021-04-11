@@ -15,21 +15,20 @@ trait EmployeeTrait
 
     public function employees(): Collection
     {
-        return collect($this->getEmployeesFromJson());
+        return collect($this->getEmployeesFromJson()['funcionarios']);
     }
 
-    public function calculateSalary(): Collection
+    public function calculateSalary(Collection $employees): Collection
     {
-        return $this->employees
+        return $employees
             ->map(function ($employee) {
                 return array_merge(
                     ['nome' => $employee['nome']],
                     ['sobrenome' => $employee['sobrenome']],
-                    ['salario' => $employee['salario']]
+                    ['salario' => $employee['salario']],
+                    ['area' => $employee['area']],
                 );
-            })
-            ->groupBy('salario')
-            ->sortKeysDesc();
+            });
     }
 }
 
