@@ -2,20 +2,16 @@
 
 namespace App;
 
+require_once('EmployeeTrait.php');
+
+use EmployeeTrait;
+
 class Employee
 {
-    public function __construct(
-    ) { }
-
-    protected function getEmployeesFromJson(): array
-    {
-        $pathJson = __ROOT__ . "../../funcionarios.json";
-        return json_decode(file_get_contents($pathJson), true);
-    }
+    use EmployeeTrait;
 
     public function getEmployees()
     {
-        $employees = $this->getEmployeesFromJson();
-        return collect($employees['funcionarios'])->all();
+        return $this->employees();
     }
 }
