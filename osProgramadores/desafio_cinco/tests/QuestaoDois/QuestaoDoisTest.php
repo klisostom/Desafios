@@ -34,24 +34,30 @@ class QuestaoDoisTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($salaries));
     }
 
-    public function test_print_result_highests_salaries_by_area(): void
+    public function test_result_highests_salaries_by_area(): void
     {
         $salariesPrinted = (new SalaryArea())->highestsSalariesPrintedByArea();
 
-        $resultForCompare =
-'
-    area_max|SM|Bernardo Costa|3700.00
-    area_max|SD|Fabio Souza|2750.00
-    area_max|SD|Cleverton Farias|2750.00
-    area_max|SD|Washington Ramos|2700.00
-';
+        $salariesPrinted = collect($salariesPrinted)->flatten(1);
 
-        $pattern = array('/[\"\r]/');
-        $atual = preg_replace($pattern, '', $resultForCompare);
-        $expected = $salariesPrinted;
-
-        $this->assertIsString($expected);
-        //$this->assertSame($expected, $atual);
+        $this->assertContains('area_max|SM|Bernardo Costa|3700.00', $salariesPrinted);
+        $this->assertContains('area_max|UD|Washington Ramos|2700.00', $salariesPrinted);
+        $this->assertContains('area_max|SD|Cleverton Farias|2750.00', $salariesPrinted);
+        $this->assertContains('area_max|SD|Fabio Souza|2750.00', $salariesPrinted);
     }
+
+   /*public function test_print(): void
+    {
+        $resultForCompare =
+        '
+            area_max|SM|Bernardo Costa|3700.00
+            area_max|UD|Washington Ramos|2700.00
+            area_max|SD|Cleverton Farias|2750.00
+            area_max|SD|Fabio Souza|2750.00
+        ';
+
+                $pattern = array('/[\"\r]/');
+                $atual = preg_replace($pattern, '', $resultForCompare);
+    }*/
 }
 
