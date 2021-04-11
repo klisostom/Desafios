@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Collection;
+
 /**
  * Get employees
  */
@@ -11,9 +13,23 @@ trait EmployeeTrait
         return json_decode(file_get_contents($pathJson), true);
     }
 
-    public function employees()
+    public function employees(): Collection
     {
         return collect($this->getEmployeesFromJson());
+    }
+
+    public function calculateSalary(): Collection
+    {
+        return $this->employees
+            ->map(function ($employee) {
+                return array_merge(
+                    ['nome' => $employee['nome']],
+                    ['sobrenome' => $employee['sobrenome']],
+                    ['salario' => $employee['salario']]
+                );
+            })
+            ->groupBy('salario')
+            ->sortKeysDesc();
     }
 }
 
