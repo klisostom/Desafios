@@ -18,17 +18,21 @@ class Salary implements SalaryInterface
             $this->employees() :
             collect($employees);
     }
-    
+
     public function bigger(): array
     {
-        return $this->calculateSalary()
+        return $this->calculateSalary($this->employees)
+            ->groupBy('salario')
+            ->sortKeysDesc()
             ->first()
             ->all();
     }
 
     public function smaller(): array
     {
-        return $this->calculateSalary()
+        return $this->calculateSalary($this->employees)
+            ->groupBy('salario')
+            ->sortKeysDesc()
             ->last()
             ->all();
     }
