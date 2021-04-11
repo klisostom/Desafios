@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class QuestaoUmTest extends TestCase
 {
-    protected function getEmployees(): array
+    protected function getEmployees()
     {
         return (new Employee())->getEmployees();
     }
@@ -29,7 +29,7 @@ class QuestaoUmTest extends TestCase
 
     public function test_get_employees(): void
     {
-        $employees = $this->getEmployees();
+        $employees = $this->getEmployees()->toArray();
 
         $this->assertIsArray($employees);
         $this->assertNotEmpty($employees);
