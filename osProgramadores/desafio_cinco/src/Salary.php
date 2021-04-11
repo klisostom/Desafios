@@ -2,21 +2,26 @@
 
 namespace App;
 
+require_once('SalaryInterface.php');
+require_once('EmployeeTrait.php');
+
+use EmployeeTrait;
+use App\SalaryInterface;
+
 class Salary implements SalaryInterface
 {
-    public function __construct(protected array $employees)
-    {
-        #
-    }
+    use EmployeeTrait;
 
-    protected function employees()
+    public function __construct(protected mixed $employees = [])
     {
-        return collect($this->employees);
+        $this->employees = (count($employees) === 0) ?
+            $this->employees() :
+            collect($employees);
     }
 
     protected function calculateSalary()
     {
-        return $this->employees()
+        return $this->employees
             ->map(function ($employee) {
                 return array_merge(
                     ['nome' => $employee['nome']],
@@ -43,7 +48,7 @@ class Salary implements SalaryInterface
 
     public function average(): float
     {
-        $result = $this->employees()->avg('salario');
+        $result = $this->employees->avg('salario');
         return number_format($result, 2, '.', '');
     }
 
@@ -60,17 +65,19 @@ class Salary implements SalaryInterface
     private function printBiggers()
     {
         return collect($this->bigger())
-        ->map(function ($employees) {
-            return "global_max|{$employees['nome']}|" . number_format($employees['salario'], 2, '.', '');
-        });
+            ->map(function ($employee) {
+                return "global_max|{$employee['nome']}|" .
+                    number_format($employee['salario'], 2, '.', '');
+            });
     }
 
     private function printSmallers()
     {
         return function ($biggers) {
             $smallers = collect($this->smaller())
-                ->map(function ($employees) {
-                    return "global_min|{$employees['nome']}|" . number_format($employees['salario'], 2, '.', '');
+                ->map(function ($employee) {
+                    return "global_min|{$employee['nome']}|" .
+                        number_format($employee['salario'], 2, '.', '');
                 });
 
             return collect(array_merge($biggers->toArray(), $smallers->toArray()));
