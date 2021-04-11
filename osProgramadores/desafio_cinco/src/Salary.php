@@ -25,6 +25,7 @@ class Salary implements SalaryInterface
             ->map(function ($employee) {
                 return array_merge(
                     ['nome' => $employee['nome']],
+                    ['sobrenome' => $employee['sobrenome']],
                     ['salario' => $employee['salario']]
                 );
             })
@@ -66,7 +67,7 @@ class Salary implements SalaryInterface
     {
         return collect($this->bigger())
             ->map(function ($employee) {
-                return "global_max|{$employee['nome']}|" .
+                return "global_max|{$employee['nome']} {$employee['sobrenome']}|" .
                     number_format($employee['salario'], 2, '.', '');
             });
     }
@@ -76,7 +77,7 @@ class Salary implements SalaryInterface
         return function ($biggers) {
             $smallers = collect($this->smaller())
                 ->map(function ($employee) {
-                    return "global_min|{$employee['nome']}|" .
+                    return "global_min|{$employee['nome']} {$employee['sobrenome']}|" .
                         number_format($employee['salario'], 2, '.', '');
                 });
 

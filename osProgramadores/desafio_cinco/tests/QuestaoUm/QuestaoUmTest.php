@@ -20,10 +20,10 @@ class QuestaoUmTest extends TestCase
     protected function getEmployeesFactory(): array
     {
         return [
-            ["salario" => 3200.00, "nome" => "Marcelo Fresno"],
-            ["salario" => 1240.00, "nome" => "Ciclano Arrocha"],
-            ["salario" => 1000.00, "nome" => "Beltano Cisco"],
-            ["salario" => 1000.00, "nome" => "Chico Tripa"],
+            ["salario" => 3200.00, "nome" => "Marcelo", "sobrenome" => "Fresno"],
+            ["salario" => 1240.00, "nome" => "Ciclano", "sobrenome" => "Arrocha"],
+            ["salario" => 1000.00, "nome" => "Beltano", "sobrenome" => "Cisco"],
+            ["salario" => 1000.00, "nome" => "Chico", "sobrenome" => "Tripa"],
         ];
     }
 
@@ -48,8 +48,8 @@ $result =
     global_avg|1610.00
 ';
         $pattern = array('/[\"\r]/');
-        $atual = preg_replace($pattern, '', $result);
-        $expected = $salary->print_questao_um();
+        $expected = preg_replace($pattern, '', $result);
+        $atual = $salary->print_questao_um();
 
         $this->assertIsString($salary->print_questao_um());
         $this->assertSame($expected, $atual);
