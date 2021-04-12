@@ -13,6 +13,11 @@ trait EmployeeTrait
         return json_decode(file_get_contents($pathJson), true);
     }
 
+    public function areas(): Collection
+    {
+        return collect($this->getEmployeesFromJson()['areas']);
+    }
+
     public function employees(): Collection
     {
         return collect($this->getEmployeesFromJson()['funcionarios']);
