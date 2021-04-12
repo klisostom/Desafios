@@ -55,7 +55,17 @@ class SalaryArea implements SalaryInterface
 
     public function average(): array|float
     {
-        return [];
+        return $this->calculateSalary($this->employees)
+            ->groupBy('area')
+            ->map(function ($area, $key) {
+                // return $area;
+                $salaryAverage = $area->avg('salario');
+                $area = $this->areas()->firstWhere('codigo', $key);
+
+                return "area_avg|{$area['nome']}|" .
+                    number_format($salaryAverage, 2, '.', '');
+
+            })->toArray();
     }
 
     public function highestsSalariesByArea(): mixed
