@@ -1,15 +1,5 @@
 <?php declare(strict_types=1);
 
-/*
-    2. Quem mais recebe e quem menos recebe em cada área e a média salarial em cada área.
-
-    Calcular e imprimir o nome completo do(s) funcionário(s) com o(s) maior(es) e menor(res)
-    salário(s) por área da empresa empresa, bem como o salário médio (também por área).
-    Em caso de empate (mais de um funcionário nas posições de maior ou menor salário
-    em uma determinada área), imprimir todos os funcionários nessas posições que tem
-    o mesmo salário, em cada área.
-*/
-
 namespace App;
 
 define('__ROOT__', dirname(dirname(__FILE__)));
@@ -21,6 +11,13 @@ use PHPUnit\Framework\TestCase;
 
 class QuestaoDoisTest extends TestCase
 {
+    protected SalaryArea $salary;
+
+    protected function setUp(): void
+    {
+        $this->salary = new SalaryArea();
+    }
+
     protected function getEmployees(): array
     {
         return (new Employee())->getEmployees();
@@ -28,7 +25,7 @@ class QuestaoDoisTest extends TestCase
 
     public function test_get_the_highests_salaries_by_area(): void
     {
-        $salaries = (new SalaryArea())->highestsSalariesByArea();
+        $salaries = $this->salary->highestsSalariesByArea();
 
         $this->assertIsArray($salaries);
         $this->assertGreaterThanOrEqual(1, count($salaries));
@@ -36,7 +33,7 @@ class QuestaoDoisTest extends TestCase
 
     public function test_result_highests_salaries_by_area(): void
     {
-        $salariesPrinted = (new SalaryArea())->highestsSalariesByArea();
+        $salariesPrinted = $this->salary->highestsSalariesByArea();
 
         $salariesPrinted = collect($salariesPrinted)->flatten(1);
 
@@ -48,7 +45,7 @@ class QuestaoDoisTest extends TestCase
 
     public function test_result_smallers_salaries_by_area(): void
     {
-        $salariesPrinted = (new SalaryArea())->smallestsSalariesByArea();
+        $salariesPrinted = $this->salary->smallestsSalariesByArea();
 
         $salariesPrinted = collect($salariesPrinted)->flatten(1);
 
@@ -57,5 +54,31 @@ class QuestaoDoisTest extends TestCase
         $this->assertContains('area_min|Desenvolvimento de Software|Sergio Pinheiro|2450.00', $salariesPrinted);
         $this->assertContains('area_min|Desenvolvimento de Software|Fernando Ramos|2450.00', $salariesPrinted);
     }
+
+    public function test_result_average_by_area(): void
+    {
+        $average = $this->salary->average();
+
+        $this->assertContains(
+            'area_avg|Gerenciamento de Software|3450.00',
+            $average
+        );
+
+        $this->assertContains(
+            'area_avg|Designer de UI/UX|2566.67',
+            $average
+        );
+
+        $this->assertContains(
+            'area_avg|Desenvolvimento de Software|2575.00',
+            $average
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->salary);
+    }
+
 }
 
