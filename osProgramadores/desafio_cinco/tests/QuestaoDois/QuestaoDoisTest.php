@@ -36,28 +36,26 @@ class QuestaoDoisTest extends TestCase
 
     public function test_result_highests_salaries_by_area(): void
     {
-        $salariesPrinted = (new SalaryArea())->highestsSalariesPrintedByArea();
+        $salariesPrinted = (new SalaryArea())->highestsSalariesByArea();
 
         $salariesPrinted = collect($salariesPrinted)->flatten(1);
 
-        $this->assertContains('area_max|SM|Bernardo Costa|3700.00', $salariesPrinted);
-        $this->assertContains('area_max|UD|Washington Ramos|2700.00', $salariesPrinted);
-        $this->assertContains('area_max|SD|Cleverton Farias|2750.00', $salariesPrinted);
-        $this->assertContains('area_max|SD|Fabio Souza|2750.00', $salariesPrinted);
+        $this->assertContains('area_max|Gerenciamento de Software|Bernardo Costa|3700.00', $salariesPrinted);
+        $this->assertContains('area_max|Designer de UI/UX|Washington Ramos|2700.00', $salariesPrinted);
+        $this->assertContains('area_max|Desenvolvimento de Software|Cleverton Farias|2750.00', $salariesPrinted);
+        $this->assertContains('area_max|Desenvolvimento de Software|Fabio Souza|2750.00', $salariesPrinted);
     }
 
-   /*public function test_print(): void
+    public function test_result_smallers_salaries_by_area(): void
     {
-        $resultForCompare =
-        '
-            area_max|SM|Bernardo Costa|3700.00
-            area_max|UD|Washington Ramos|2700.00
-            area_max|SD|Cleverton Farias|2750.00
-            area_max|SD|Fabio Souza|2750.00
-        ';
+        $salariesPrinted = (new SalaryArea())->smallestsSalariesByArea();
 
-                $pattern = array('/[\"\r]/');
-                $atual = preg_replace($pattern, '', $resultForCompare);
-    }*/
+        $salariesPrinted = collect($salariesPrinted)->flatten(1);
+
+        $this->assertContains('area_min|Gerenciamento de Software|Marcelo Silva|3200.00', $salariesPrinted);
+        $this->assertContains('area_min|Designer de UI/UX|Letícia Farias|2450.00', $salariesPrinted);
+        $this->assertContains('area_min|Desenvolvimento de Software|Sergio Pinheiro|2450.00', $salariesPrinted);
+        $this->assertContains('area_min|Desenvolvimento de Software|Fernando Ramos|2450.00', $salariesPrinted);
+    }
 }
 
