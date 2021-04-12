@@ -28,7 +28,9 @@ class SalaryArea implements SalaryInterface
                         ->sortKeysDesc()
                         ->first()
                         ->map(function ($employee) {
-                            return "area_max|{$employee['area']}|{$employee['nome']} {$employee['sobrenome']}|" .
+                            $area = $this->areas()->firstWhere('codigo', $employee['area']);
+
+                            return "area_max|{$area['nome']}|{$employee['nome']} {$employee['sobrenome']}|" .
                                 number_format($employee['salario'], 2, '.', '');
                         });
             })->toArray();
@@ -36,7 +38,19 @@ class SalaryArea implements SalaryInterface
 
     public function smaller(): array
     {
-        return [];
+        return $this->calculateSalary($this->employees)
+            ->groupBy('area')
+            ->map(function ($area) {
+                return $area->groupBy('salario')
+                        ->sortKeysDesc()
+                        ->last()
+                        ->map(function ($employee) {
+                            $area = $this->areas()->firstWhere('codigo', $employee['area']);
+
+                            return "area_min|{$area['nome']}|{$employee['nome']} {$employee['sobrenome']}|" .
+                                number_format($employee['salario'], 2, '.', '');
+                        });
+            })->toArray();
     }
 
     public function average(): array|float
@@ -49,9 +63,9 @@ class SalaryArea implements SalaryInterface
         return $this->bigger();
     }
 
-    public function highestsSalariesPrintedByArea(): mixed
+    public function smallestsSalariesByArea(): mixed
     {
-        return $this->highestsSalariesByArea();
+        return $this->smaller();
     }
 }
 
