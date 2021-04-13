@@ -41,16 +41,28 @@ class SalaryArea implements SalaryInterface
         return $this->calculateSalary($this->employees)
             ->groupBy('area')
             ->map(function ($area) {
-                return $area->groupBy('salario')
-                        ->sortKeysDesc()
-                        ->last()
-                        ->map(function ($employee) {
-                            $area = $this->areas()->firstWhere('codigo', $employee['area']);
-
-                            return "area_min|{$area['nome']}|{$employee['nome']} {$employee['sobrenome']}|" .
-                                number_format($employee['salario'], 2, '.', '');
-                        });
+                return $this->groupingBySalaries($area);
             })->toArray();
+    }
+
+    public function groupingBySalaries($area)
+    {
+        return $area->groupBy('salario')
+            ->sortKeysDesc()
+            ->last()
+            ->pipe(function ($collection) {
+                return $this->printSmallerResult($collection);
+            });
+    }
+
+    protected function printSmallerResult($groupedBySalaries)
+    {
+        return $groupedBySalaries->map(function ($employee) {
+            $area = $this->areas()->firstWhere('codigo', $employee['area']);
+
+            return "area_min|{$area['nome']}|{$employee['nome']} {$employee['sobrenome']}|" .
+                number_format($employee['salario'], 2, '.', '');
+        });
     }
 
     public function average(): array|float
