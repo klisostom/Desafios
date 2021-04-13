@@ -75,6 +75,15 @@ class QuestaoDoisTest extends TestCase
         );
     }
 
+    public function test_print_result(): void
+    {
+        $result = $this->salary->test_print_questao_dois();
+
+        $this->assertIsString($result);
+    }
+
+    // ===============================================
+
     protected function tearDown(): void
     {
         unset($this->salary);
