@@ -77,9 +77,28 @@ class QuestaoDoisTest extends TestCase
 
     public function test_print_result(): void
     {
-        $result = $this->salary->test_print_questao_dois();
+        $atual = $this->salary->test_print_questao_dois();
 
-        $this->assertIsString($result);
+        $result =
+'
+    area_max|Gerenciamento de Software|Bernardo Costa|3700.00
+    area_max|Designer de UI\/UX|Washington Ramos|2700.00
+    area_max|Desenvolvimento de Software|Cleverton Farias|2750.00
+    area_max|Desenvolvimento de Software|Fabio Souza|2750.00
+    area_min|Gerenciamento de Software|Marcelo Silva|3200.00
+    area_min|Designer de UI\/UX|Let\u00edcia Farias|2450.00
+    area_min|Desenvolvimento de Software|Sergio Pinheiro|2450.00
+    area_min|Desenvolvimento de Software|Fernando Ramos|2450.00
+    area_avg|Gerenciamento de Software|3450.00
+    area_avg|Designer de UI\/UX|2566.67
+    area_avg|Desenvolvimento de Software|2575.00
+';
+
+        $pattern = array('/[\"\r]/');
+        $expected = preg_replace($pattern, '', $result);
+
+        $this->assertIsString($atual);
+        $this->assertSame($expected, $atual);
     }
 
     // ===============================================
