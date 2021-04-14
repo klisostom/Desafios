@@ -45,17 +45,17 @@ class SalaryArea implements SalaryInterface
             })->toArray();
     }
 
-    public function groupingBySalaries($area)
+    protected function groupingBySalaries($area)
     {
         return $area->groupBy('salario')
             ->sortKeysDesc()
             ->last()
             ->pipe(function ($collection) {
-                return $this->printSmallerResult($collection);
+                return $this->printSmallers($collection);
             });
     }
 
-    protected function printSmallerResult($groupedBySalaries)
+    protected function printSmallers($groupedBySalaries)
     {
         return $groupedBySalaries->map(function ($employee) {
             $area = $this->areas()->firstWhere('codigo', $employee['area']);
@@ -88,6 +88,19 @@ class SalaryArea implements SalaryInterface
     public function smallestsSalariesByArea(): mixed
     {
         return $this->smaller();
+    }
+
+    public function test_print_questao_dois(): string
+    {
+        $result = [];
+
+        array_push($result, $this->bigger());
+        array_push($result, $this->smaller());
+        array_push($result, $this->average());
+
+        $result = collect($result)->flatten()->toJson(JSON_PRETTY_PRINT);
+
+        return preg_replace(array('/[\"\r\[\],]/'), '', $result);
     }
 }
 
