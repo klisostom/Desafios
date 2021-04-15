@@ -5,22 +5,21 @@ namespace App;
 define('__ROOT__', dirname(dirname(__FILE__)));
 require_once __ROOT__ . '../../vendor/autoload.php';
 require_once __ROOT__ . '../../src/SalaryArea.php';
+require_once __ROOT__ . '../Help.php';
 
+use Help;
 use App\SalaryArea;
 use PHPUnit\Framework\TestCase;
 
 class QuestaoDoisTest extends TestCase
 {
+    use Help;
+
     protected SalaryArea $salary;
 
     protected function setUp(): void
     {
         $this->salary = new SalaryArea();
-    }
-
-    protected function getEmployees(): array
-    {
-        return (new Employee())->getEmployees();
     }
 
     public function test_get_the_highests_salaries_by_area(): void
