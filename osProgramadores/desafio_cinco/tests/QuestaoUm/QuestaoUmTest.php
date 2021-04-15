@@ -7,15 +7,16 @@ require_once __ROOT__ . '../../vendor/autoload.php';
 
 require_once __ROOT__ . '../../src/Employee.php';
 require_once __ROOT__ . '../../src/Salary.php';
+require_once __ROOT__ . '../Help.php';
 
+use Help;
 use PHPUnit\Framework\TestCase;
 
 class QuestaoUmTest extends TestCase
 {
-    protected function getEmployees()
-    {
-        return (new Employee())->getEmployees();
-    }
+    use Help;
+
+    
 
     protected function getEmployeesFactory(): array
     {
