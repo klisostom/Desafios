@@ -76,7 +76,7 @@ class QuestaoDoisTest extends TestCase
 
     public function test_print_result(): void
     {
-        $atual = $this->salary->test_print_questao_dois();
+        $atual = $this->salary->print_questao_dois();
 
         $result =
 '
