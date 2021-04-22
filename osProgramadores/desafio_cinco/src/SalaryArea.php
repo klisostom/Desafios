@@ -70,7 +70,6 @@ class SalaryArea implements SalaryInterface
         return $this->calculateSalary($this->employees)
             ->groupBy('area')
             ->map(function ($area, $key) {
-                // return $area;
                 $salaryAverage = $area->avg('salario');
                 $area = $this->areas()->firstWhere('codigo', $key);
 
@@ -90,7 +89,7 @@ class SalaryArea implements SalaryInterface
         return $this->smaller();
     }
 
-    public function test_print_questao_dois(): string
+    public function print_questao_dois(): string
     {
         $result = [];
 
@@ -101,6 +100,50 @@ class SalaryArea implements SalaryInterface
         $result = collect($result)->flatten()->toJson(JSON_PRETTY_PRINT);
 
         return preg_replace(array('/[\"\r\[\],]/'), '', $result);
+    }
+
+    public function resultLeastByArea(): mixed
+    {
+        return $this->employees()
+            ->groupBy('area')
+            ->map(function ($collection) {
+                return $collection->count();
+            });
+    }
+
+    protected function countEmployeesByArea($result)
+    {
+        return array_diff_assoc($result->all(), array_unique($result->all()));
+    }
+
+    public function print_questao_tres()
+    {
+        $result = $this->resultLeastByArea();
+
+        $isRepeated = $this->countEmployeesByArea($result);
+
+        if (!empty($isRepeated))
+        {
+            return collect(array_values($isRepeated))
+                ->map(function ($item) use ($result) {
+                    return $result->filter(function ($x) use ($item) {
+                        return $x == $item;
+                    });
+                })->flatMap(function ($collection) {
+                    return $collection->map(function ($count, $key) {
+                        $area = $this->areas()->firstWhere('codigo', $key);
+
+                        return "least_employees|{$area['nome']}|" . $count;
+                    });
+                })->flatten()->toJson(JSON_PRETTY_PRINT);
+        }
+
+        $keys = array_keys($result->sort()->toArray());
+        $key = $keys[0];
+        $value = $result[$key];
+
+        $area = $this->areas()->firstWhere('codigo', $key);
+        return "least_employees|{$area['nome']}|" . $value;
     }
 }
 
